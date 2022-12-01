@@ -9,14 +9,14 @@ public class Souvenir {
 
   private Producer producer;
 
-  private LocalDate createdOn;
+  private LocalDate createdAt;
 
   private Double price;
 
-  public Souvenir(String name, Producer producer, LocalDate createdOn, Double price) {
+  public Souvenir(String name, Producer producer, LocalDate createdAt, Double price) {
     this.name = name;
     this.producer = producer;
-    this.createdOn = createdOn;
+    this.createdAt = createdAt;
     this.price = price;
   }
 
@@ -36,12 +36,12 @@ public class Souvenir {
     this.producer = producer;
   }
 
-  public LocalDate getCreatedOn() {
-    return createdOn;
+  public LocalDate getCreatedAt() {
+    return createdAt;
   }
 
-  public void setCreatedOn(LocalDate createdOn) {
-    this.createdOn = createdOn;
+  public void setCreatedAt(LocalDate createdAt) {
+    this.createdAt = createdAt;
   }
 
   public Double getPrice() {
@@ -57,12 +57,12 @@ public class Souvenir {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Souvenir souvenir = (Souvenir) o;
-    return Objects.equals(name, souvenir.name) && Objects.equals(producer, souvenir.producer) && Objects.equals(createdOn, souvenir.createdOn) && Objects.equals(price, souvenir.price);
+    return Objects.equals(name, souvenir.name) && Objects.equals(producer, souvenir.producer) && Objects.equals(createdAt, souvenir.createdAt) && Objects.equals(price, souvenir.price);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, producer, createdOn, price);
+    return Objects.hash(name, producer, createdAt, price);
   }
 
   @Override
@@ -70,7 +70,7 @@ public class Souvenir {
     return "Souvenir -> " +
             "name: " + name +
             ", " + producer +
-            ", created: " + createdOn +
+            ", created: " + createdAt +
             ", price: " + price;
   }
 

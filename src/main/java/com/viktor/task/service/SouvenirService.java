@@ -6,6 +6,7 @@ import com.viktor.task.model.Souvenir;
 import java.time.Year;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public interface SouvenirService {
 
@@ -23,6 +24,10 @@ public interface SouvenirService {
 
   Map<Year, List<Souvenir>> findSouvenirsByYears(List<Souvenir> souvenirList);
 
-  void deleteProducerAndHisSouvenirs(Producer producer);
+  void deleteProducerAndHisSouvenirs(List<Souvenir> souvenirList, Producer producer);
+
+  void editCountryOfProducer(List<Souvenir> souvenirList, String producerName, String newCountry);
+
+  void editPriceOfSouvenir(List<Souvenir> souvenirs, Predicate<Souvenir> souvenirPredicate, String name, double newPrice);
 
 }

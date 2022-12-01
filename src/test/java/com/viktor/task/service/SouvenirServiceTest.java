@@ -18,50 +18,63 @@ class SouvenirServiceTest {
 
   private final SouvenirService souvenirService = new SouvenirServiceImpl();
 
-  List<Souvenir> testSouvenirs = new ArrayList<>();
+  private final List<Souvenir> testSouvenirs = new ArrayList<>();
 
   @BeforeEach
   void setup() {
     Producer firstProducer = new Producer("B", "UA");
     Producer secondProducer = new Producer("C", "USA");
-    testSouvenirs.add(new Souvenir("A", firstProducer, LocalDate.of(2007, 7, 23), 15.5));
-    testSouvenirs.add(new Souvenir("A", secondProducer, LocalDate.of(2007, 5, 20), 20.5));
-    testSouvenirs.add(new Souvenir("D", secondProducer, LocalDate.of(2008, 5, 20), 29.5));
+    this.testSouvenirs.add(new Souvenir("A", firstProducer, LocalDate.of(2007, 7, 23), 15.5));
+    this.testSouvenirs.add(new Souvenir("A", secondProducer, LocalDate.of(2007, 5, 20), 20.5));
+    this.testSouvenirs.add(new Souvenir("D", secondProducer, LocalDate.of(2008, 5, 20), 29.5));
   }
 
   @Test
-  void findSouvenirsByCountry() {
-    List<Souvenir> result = souvenirService.findSouvenirsByCountry(testSouvenirs, "USA");
+  void findSouvenirsByCountryOK() {
+    List<Souvenir> result = this.souvenirService.findSouvenirsByCountry(testSouvenirs, "USA");
     assertEquals(2, result.size());
   }
 
   @Test
-  void findProducersByPriceLessThan() {
-    List<Producer> result = souvenirService.findProducersByPriceLessThan(testSouvenirs, 18.4);
+  void findProducersByPriceLessThanOK() {
+    List<Producer> result = this.souvenirService.findProducersByPriceLessThan(testSouvenirs, 18.4);
     assertEquals(1, result.size());
   }
 
   @Test
-  void findAllInformationProducerAndHisSouvenirs() {
-    Map<Producer, List<Souvenir>> result = souvenirService.findAllInformationProducerAndHisSouvenirs(testSouvenirs);
+  void findAllInformationProducerAndHisSouvenirsOK() {
+    Map<Producer, List<Souvenir>> result = this.souvenirService.findAllInformationProducerAndHisSouvenirs(testSouvenirs);
     assertEquals(2, result.get(new Producer("C", "USA")).size());
   }
 
   @Test
-  void findProducersBySouvenirAndYear() {
-    List<Producer> result = souvenirService.findProducersBySouvenirAndYear(testSouvenirs, "A", 2007);
+  void findProducersBySouvenirAndYearOK() {
+    List<Producer> result = this.souvenirService.findProducersBySouvenirAndYear(testSouvenirs, "A", 2007);
     assertEquals(2, result.size());
   }
 
   @Test
-  void findSouvenirsByYear() {
-    Map<Year, List<Souvenir>> result = souvenirService.findSouvenirsByYears(testSouvenirs);
+  void findSouvenirsByYearOK() {
+    Map<Year, List<Souvenir>> result = this.souvenirService.findSouvenirsByYears(testSouvenirs);
     assertEquals(2, result.get(Year.of(2007)).size());
   }
 
   @Test
-  void deleteProducerAndHisSouvenirs() {
-    //TODO
+  void deleteProducerAndHisSouvenirsOK() {
+    this.souvenirService.deleteProducerAndHisSouvenirs(this.testSouvenirs,new Producer("C", "USA"));
+    assertEquals(1, this.testSouvenirs.size());
+  }
+
+  @Test
+  void findAllSouvenirsOk() {
+    List<Souvenir> souvenirs = this.souvenirService.findAllSouvenirs(this.testSouvenirs);
+    assertEquals(3, souvenirs.size());
+  }
+
+  @Test
+  void findAllProducersOk() {
+    List<Producer> producers = this.souvenirService.findAllProducers(this.testSouvenirs);
+    assertEquals(2, producers.size());
   }
 
 }

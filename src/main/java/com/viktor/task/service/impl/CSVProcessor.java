@@ -49,12 +49,13 @@ public class CSVProcessor implements FileService {
             BufferedWriter writer = Files.newBufferedWriter(Paths.get(file));
 
             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.newFormat(delimiter)
+                    .withRecordSeparator('\n')
                     .withHeader(SOUVENIR_NAME, DATE, PRICE, COUNTRY, PRODUCER_NAME));
 
     ) {
       for (Souvenir souvenir : souvenirs) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedString = souvenir.getCreatedOn().format(formatter);
+        String formattedString = souvenir.getCreatedAt().format(formatter);
         csvPrinter.printRecord(souvenir.getName(), formattedString, souvenir.getPrice(), souvenir.getProducer().getCountry(), souvenir.getProducer().getName());
       }
       csvPrinter.flush();

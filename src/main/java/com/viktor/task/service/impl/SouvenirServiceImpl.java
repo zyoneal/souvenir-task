@@ -8,6 +8,7 @@ import java.time.Year;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SouvenirServiceImpl implements SouvenirService {
@@ -30,10 +31,10 @@ public class SouvenirServiceImpl implements SouvenirService {
   @Override
   public List<Producer> findProducersByPriceLessThan(List<Souvenir> souvenirList, Double price) {
     return souvenirList.stream()
-      .filter(souvenir -> souvenir.getPrice().compareTo(price) < 0)
-      .map(Souvenir::getProducer)
-      .distinct()
-      .collect(Collectors.toList());
+            .filter(souvenir -> souvenir.getPrice().compareTo(price) < 0)
+            .map(Souvenir::getProducer)
+            .distinct()
+            .collect(Collectors.toList());
   }
 
   @Override
@@ -50,10 +51,10 @@ public class SouvenirServiceImpl implements SouvenirService {
   @Override
   public List<Producer> findProducersBySouvenirAndYear(List<Souvenir> souvenirList, String souvenir, int year) {
     return souvenirList.stream()
-      .filter(s -> s.getName().equals(souvenir))
-      .filter(s -> s.getCreatedOn().getYear() == year)
-      .map(Souvenir::getProducer)
-      .collect(Collectors.toList());
+            .filter(s -> s.getName().equals(souvenir))
+            .filter(s -> s.getCreatedAt().getYear() == year)
+            .map(Souvenir::getProducer)
+            .collect(Collectors.toList());
   }
 
   @Override
@@ -62,8 +63,8 @@ public class SouvenirServiceImpl implements SouvenirService {
     for (Year start = Year.of(0); start.compareTo(Year.now()) < 0; start = start.plusYears(1)) {
       int temp = start.getValue();
       List<Souvenir> souvenirsOfYear = souvenirList.stream()
-        .filter(souvenir -> temp == souvenir.getCreatedOn().getYear())
-        .collect(Collectors.toList());
+              .filter(souvenir -> temp == souvenir.getCreatedAt().getYear())
+              .collect(Collectors.toList());
       if (!souvenirsOfYear.isEmpty()) {
         resultMap.put(start, souvenirsOfYear);
       }
@@ -72,8 +73,23 @@ public class SouvenirServiceImpl implements SouvenirService {
   }
 
   @Override
-  public void deleteProducerAndHisSouvenirs(Producer producer) {
+  public void deleteProducerAndHisSouvenirs(List<Souvenir> souvenirList, Producer producer) {
+    List<Souvenir> souvenirsWithProducer = souvenirList.stream()
+            .filter(souvenir -> souvenir.getProducer().equals(producer))
+            .collect(Collectors.toList());
+    souvenirList.removeAll(souvenirsWithProducer);
+  }
 
+  public void editCountryOfProducer(List<Souvenir> souvenirList, String producerName, String newCountry) {
+    souvenirList.stream()
+            .map(Souvenir::getProducer)
+            .filter(producer -> producer.getName().equals(producerName))
+            .forEach(producer -> producer.setCountry(newCountry));
+  }
+
+  @Override
+  public void editPriceOfSouvenir(List<Souvenir> souvenirs, Predicate<Souvenir> souvenirPredicate,String name, double newPrice) {
+    souvenirs.stream().filter(souvenirPredicate).forEach(souvenir -> souvenir.setPrice(newPrice));
   }
 
 }
